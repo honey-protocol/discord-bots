@@ -13,46 +13,30 @@ client.once('ready', () => {
 // Login to Discord with your client's token
 client.login(HGB_TOKEN);
 
-// Call api and alternate updating FP with listing every 30 seconds
+// Call api and update every 1 minute
 const updateFloorPrice = () => {
-  	axios.get('https://api-mainnet.magiceden.dev/v2/collections/honey_genesis_bee/stats') //api call magic eden
-	  .then((res) => {
-		  var floorPrice = res.data.floorPrice/1000000000 
-		  console.log(floorPrice)
-		  client.user?.setPresence({ 
-			status: 'online',
-			activities: [
-				{
-					name: `FP: ${floorPrice} ◎`,
-					type: 'WATCHING'
-				}
-			]
-		})
-	  })
-	  .catch((err) => {
-		  console.log(err);
-	  })
-	setTimeout(updateListed, 1000 * 20) //every 20 seconds 
-}
-
-const updateListed = () => {
-	axios.get('https://api-mainnet.magiceden.dev/v2/collections/honey_genesis_bee/stats') //api call to Magic eden
+	axios.get('https://api-mainnet.magiceden.dev/v2/collections/honey_genesis_bee/stats') //api call magic eden
 	.then((res) => {
+		var floorPrice = res.data.floorPrice/1000000000 
+		var volume = res.data.volumeAll/1000000000
 		var listedCount = res.data.listedCount
+		console.log(floorPrice)
+		console.log(volume.toFixed(2))
 		console.log(listedCount)
-	  client.user?.setPresence({ 
+		client.user?.setPresence({ 
 		  status: 'online',
 		  activities: [
 			  {
-				  name: `Listed: ${listedCount}`,
+				  name: `◎ All: ${volume.toFixed(2)}`,
 				  type: 'WATCHING'
 			  }
 		  ]
 	  })
+	  client.user?.setUsername(`🐝  ◎${floorPrice}|${listedCount}`)
 	})
 	.catch((err) => {
 		console.log(err);
 	})
-  setTimeout(updateFloorPrice, 1000 * 20) //every 20 seconds 
+  setTimeout(updateFloorPrice, 1000 * 60) //every 20 seconds 
 }
 updateFloorPrice()
