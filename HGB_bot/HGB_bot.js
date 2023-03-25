@@ -32,7 +32,7 @@ const updateFloorPrice = () => {
 			  }
 		  ]
 	  })
-	  client.user?.setUsername(`🐝  ◎${floorPrice}|${listedCount}`)
+	  client.user?.setNickname(`🐝  ◎${floorPrice}|${listedCount}`)
 	})
 	.catch((err) => {
 		console.log(err);
