@@ -14,7 +14,8 @@ client.once('ready', () => {
 client.login(HGB_TOKEN);
 
 // Call api and update every 1 minute
-const updateFloorPrice = () => {
+
+const updateFloorPrice = (guild) => {
 	axios.get('https://api-mainnet.magiceden.dev/v2/collections/honey_genesis_bee/stats') //api call magic eden
 	.then((res) => {
 		var floorPrice = res.data.floorPrice/1000000000 
@@ -32,11 +33,13 @@ const updateFloorPrice = () => {
 			  }
 		  ]
 	  })
-	  client.user?.setNickname(`🐝  ◎${floorPrice}|${listedCount}`)
+	  
+	  client.user?.setUsername(`🐝  ◎${floorPrice}|${listedCount}`)
 	})
 	.catch((err) => {
 		console.log(err);
 	})
   setTimeout(updateFloorPrice, 1000 * 60) //every 20 seconds 
 }
+const guild = client.guilds.cache.get('881855452537823232')	
 updateFloorPrice()
