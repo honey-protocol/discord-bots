@@ -6,16 +6,7 @@ const axios = require('axios');
 // Create a new client instance
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 
-// When the client is ready, run this code (only once)
-client.once('ready', () => {
-	console.log('Ready!');
-});
-// Login to Discord with your client's token
-client.login(HGB_TOKEN);
-
-// Call api and update every 1 minute
-
-const updateFloorPrice = (guild) => {
+const updateFloorPrice = (member) => {
 	axios.get('https://api-mainnet.magiceden.dev/v2/collections/honey_genesis_bee/stats') //api call magic eden
 	.then((res) => {
 		var floorPrice = res.data.floorPrice/1000000000 
@@ -33,13 +24,28 @@ const updateFloorPrice = (guild) => {
 			  }
 		  ]
 	  })
-	  
-	  client.user?.setUsername(`🐝  ◎${floorPrice}|${listedCount}`)
+	  member.setNickname(`🐝  ◎${floorPrice}|${listedCount}`)
+    	.then(updatedMember => {
+      console.log(`Changed nickname of ${updatedMember.user.username} to 🐝  ◎${floorPrice}|${listedCount}`);
+    })
+    .catch(console.error);
 	})
 	.catch((err) => {
 		console.log(err);
 	})
   setTimeout(updateFloorPrice, 1000 * 60) //every 20 seconds 
 }
-const guild = client.guilds.cache.get('881855452537823232')	
-updateFloorPrice()
+
+// When the client is ready, run this code (only once)
+client.once('ready', () => {
+	console.log('Ready!');
+	const guild = client.guilds.cache.get('881855452537823232')	
+	const member = guild.members.cache.get('913215970875703357')
+	client.user?.setUsername("HGB Floor price")
+	updateFloorPrice(member)
+});
+// Login to Discord with your client's token
+client.login(HGB_TOKEN);
+
+// Call api and update every 1 minute
+
