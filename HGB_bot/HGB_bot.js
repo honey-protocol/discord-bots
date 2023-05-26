@@ -33,7 +33,7 @@ const updateFloorPrice = (member) => {
 	.catch((err) => {
 		console.log(err);
 	})
-  setTimeout(updateFloorPrice, 1000 * 60) //every 20 seconds 
+  setTimeout(updateFloorPrice, 1000 * 60,member) //every 20 seconds 
 }
 
 // When the client is ready, run this code (only once)
